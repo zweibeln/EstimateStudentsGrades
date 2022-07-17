@@ -1,6 +1,7 @@
 import pandas as pd
 import matplotlib.pyplot as plt
-from sklearn.preprocessing import OneHotEncoder
+from sklearn.preprocessing import StandardScaler
+from sklearn.model_selection import train_test_split
 
 
 def visualize_correlation_of_features(data):
@@ -44,3 +45,16 @@ def encode_nonnumeric_values(data):
         data.drop([name], axis=1, inplace=True)
 
     return data
+
+
+def scale_split_data(data):
+    # Get data to be predicted
+    y = data['G3']
+    X = data.drop('G3', axis=1)
+
+    # Scale evrything to have unitvariance
+    scaler = StandardScaler()
+    X = pd.DataFrame(scaler.fit_transform(X, y), columns=X.columns)
+
+    # Split data_set into train and test
+    return train_test_split(X, y, train_size=0.7)
